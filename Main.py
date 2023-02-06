@@ -26,20 +26,21 @@ class Main:
         Package.load_txt(self.UserInterface.Message, "Message")
 
         # Button(s) Function(s)
-        self.UserInterface.NextToMessagePageButton.clicked.connect(lambda: self.UserInterface.stackedWidget.setCurrentIndex(1))
+        self.UserInterface.NextToMessagePageButton.clicked.connect(lambda: [self.UserInterface.stackedWidget.setCurrentIndex(1), self.UserInterface.transition([self.UserInterface.stackedWidget])])
         self.UserInterface.ChooseImageButton.clicked.connect(lambda: self.UserInterface.ChooseImageButton.setText(Package.ask_for_file()))
-        self.UserInterface.BackToMainPageButton.clicked.connect(lambda: self.UserInterface.stackedWidget.setCurrentIndex(0))
-        self.UserInterface.NextToSharePageButton.clicked.connect(lambda: self.UserInterface.stackedWidget.setCurrentIndex(2))
-        self.UserInterface.CopyEmailButton.clicked.connect(lambda: [pc.copy(Creds.google_api_email), print("Email Copied Successfully")])  # Put The Email of you Creds.json
-        self.UserInterface.BackToMesaagePageButton.clicked.connect(lambda: self.UserInterface.stackedWidget.setCurrentIndex(0))
+        self.UserInterface.BackToMainPageButton.clicked.connect(lambda: [self.UserInterface.stackedWidget.setCurrentIndex(0), self.UserInterface.transition([self.UserInterface.stackedWidget])])
+        self.UserInterface.NextToSharePageButton.clicked.connect(lambda: [self.UserInterface.stackedWidget.setCurrentIndex(2), self.UserInterface.transition([self.UserInterface.stackedWidget])])
+        self.UserInterface.CopyEmailButton.clicked.connect(lambda: [pc.copy(Creds.google_api_email), print("Email Copied Successfully")])  # Put The Email of your Creds.json
+        self.UserInterface.BackToMesaagePageButton.clicked.connect(lambda: [self.UserInterface.stackedWidget.setCurrentIndex(0), self.UserInterface.transition([self.UserInterface.stackedWidget])])
         self.UserInterface.StartButton.clicked.connect(lambda: self.startup())
-        self.UserInterface.BackButton.clicked.connect(lambda: self.UserInterface.stackedWidget.setCurrentIndex(0))
+        self.UserInterface.BackButton.clicked.connect(lambda: [self.UserInterface.stackedWidget.setCurrentIndex(0), self.UserInterface.transition([self.UserInterface.stackedWidget])])
         self.UserInterface.HowDoesItWorkButton.clicked.connect(lambda: Package.help())
 
     def startup(self):
         try:
             self.required_data()
             self.UserInterface.stackedWidget.setCurrentIndex(3)
+            self.UserInterface.transition([self.UserInterface.stackedWidget])
             self.UserInterface.WorkingLabel.setText("Working")
             self.UserInterface.BackButton.setDisabled(True)
             Package.save_txt("Sheetname", self.sheet)

@@ -6,14 +6,11 @@ from tqdm import tk
 import tkinter as tk
 import win32clipboard
 import pywhatkit as pyw
-from PySide2 import QtGui
-from selenium import webdriver
 from tkinter import filedialog
 from PySide2.QtWidgets import *
-from selenium_stealth import stealth
 from UserInterface import Ui_MainWindow
-from webdriver_manager.chrome import ChromeDriverManager
 from oauth2client.service_account import ServiceAccountCredentials
+from PySide2.QtCore import QParallelAnimationGroup, QPropertyAnimation, QEasingCurve, QPoint
 
 
 class Package:
@@ -72,26 +69,6 @@ class Package:
             return "..."
 
     @staticmethod
-    def control_chrome(profile):
-        chrome_path = f"{os.path.expanduser('~')}\AppData\Local\Google\Chrome"
-        options = webdriver.ChromeOptions()
-        options.add_argument("start-maximized")
-        options.add_argument(f"user-data-dir={chrome_path}\\{profile}")
-        options.add_experimental_option('prefs', {'intl.accept_languages': 'en,en_US'})
-        options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        options.add_experimental_option('useAutomationExtension', False)
-        chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-        stealth(chrome,
-                languages=["en-US", "en"],
-                vendor="Google Inc.",
-                platform="Win32",
-                webgl_vendor="Intel Inc.",
-                renderer="Intel Iris OpenGL Engine",
-                fix_hairline=True,
-                )
-        return chrome
-
-    @staticmethod
     def message_contact(number, image, message):
         # Sending message
         if message != "":
@@ -104,7 +81,6 @@ class Package:
 
     @staticmethod
     def help():
-
         # webbrowser.open('https://stackoverflow.com/questions/4302027/how-to-open-a-url-in-python')
         print("This will be available in the future")
 
@@ -114,5 +90,33 @@ class UserInterface(QMainWindow, Ui_MainWindow):
         super(UserInterface, self).__init__()
         self.setupUi(self)
         self.setWindowTitle("Whatsapp Auto Sender")
-        self.setWindowIcon(QtGui.QIcon("Icon.png"))
         self.show()
+
+    def transition(self, ui_element):
+        self.anim_group = QParallelAnimationGroup()
+
+        for element in ui_element:
+            self.element = element
+            x = self.element.x()
+            y = self.element.y()
+            element.move(x - 50, y)
+
+        for element in ui_element:
+            effect = QGraphicsOpacityEffect(element)
+            self.element = element
+            x = self.element.x()
+            y = self.element.y()
+            self.element.setGraphicsEffect(effect)
+            self.anim_1 = QPropertyAnimation(effect, b"opacity")
+            self.anim_1.setStartValue(0)
+            self.anim_1.setEndValue(1)
+            self.anim_1.setDuration(300)
+            self.child = element
+            self.anim = QPropertyAnimation(self.child, b"pos")
+            self.anim.setEasingCurve(QEasingCurve.InOutCubic)
+            self.anim.setEndValue(QPoint(x + 50, y))
+            self.anim.setDuration(300)
+            self.anim_group.addAnimation(self.anim_1)
+            self.anim_group.addAnimation(self.anim)
+
+        self.anim_group.start()
