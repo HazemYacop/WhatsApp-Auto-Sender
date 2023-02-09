@@ -12,6 +12,8 @@ class Main:
 
         # Start-Up
         Package.create_json(Creds.google_api_json_creds)  # Replace With your Credentials
+
+        # Re-translating UI
         self.UserInterface = UserInterface()
         self.UserInterface.stackedWidget.setCurrentIndex(0)
 
@@ -50,7 +52,7 @@ class Main:
             Package.save_txt("Message", self.message)
             start = threading.Thread(target=self.main)
             start.start()
-        except NotImplementedError as e:
+        except Exception as e:
             print(e)
             self.UserInterface.WorkingLabel.setText("Error Occured, Take a screenshot of the CMD (Black Screen) and Contact : +201150169348")
             self.UserInterface.CurrentNumberLabel.setText("")
@@ -71,7 +73,7 @@ class Main:
 
             self.start_from_row += 1
 
-        # Re Defining UI
+        # Re-translating UI
         self.UserInterface.WorkingLabel.setText("Program Finished")
         self.UserInterface.CurrentNumberLabel.setText("")
         self.UserInterface.BackButton.setDisabled(False)

@@ -83,8 +83,8 @@ class Package:
 
     @staticmethod
     def help():
-        # webbrowser.open('https://stackoverflow.com/questions/4302027/how-to-open-a-url-in-python')
         print("This will be available in the future")
+        # webbrowser.open('https://stackoverflow.com/questions/4302027/how-to-open-a-url-in-python')
 
 
 class UserInterface(QMainWindow, Ui_MainWindow):
